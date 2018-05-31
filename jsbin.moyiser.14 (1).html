@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2018 by istvan-arany (http://jsbin.com/moyiser/14/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html id="html">
+<head>
+<meta name="description" content="colorClockV2">
+  <script src="https://code.jquery.com/jquery.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">   </script>
+  <link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>ColorClock</title>
+<style id="jsbin-css">
+* {
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  background-color: #263238;
+  height: 100%;
+  width: 80%;
+}
+body {
+  min-width: 330px;
+}
+div {
+  text-align: center;
+  border-radius: 1rem;
+  min-width: 3rem;
+}
+.clock-container {
+  font-family: 'Abril Fatface', serif;
+  font-size: 1rem;
+  line-height: 3rem;
+  color: #555555;
+  position: relative;
+  transform: rotate(-10deg);
+  top: 20%;
+  left: 10%;
+}
+
+@media screen and (min-width:580px) {
+  html, body {
+    background-color: #263238;
+    height: 100%;
+    width: 80%;
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+  body {
+    min-width: 575px;
+  }
+  div {
+    text-align: center;
+    border-radius: 1rem;
+    min-width: 5rem;
+  }
+  .clock-container {
+    font-family: 'Abril Fatface', serif;
+    font-size: 2rem;
+    line-height: 6rem;
+    color: #555555;
+    position: relative;
+    transform: rotate(-15deg);
+    top: 30%;
+    left: 5%;
+  }
+}
+</style>
+</head>
+<body id="body">
+  <div class="clock-container">
+    <div id="hours"></div>
+    <div class="row">
+      <div id="0h" class="hour col-xs-2 col-sm-1">00</div>
+      <div id="1h" class="hour col-xs-2 col-sm-1">01</div>
+      <div id="2h" class="hour col-xs-2 col-sm-1">02</div>
+      <div id="3h" class="hour col-xs-2 col-sm-1">03</div>
+      <div id="4h" class="hour col-xs-2 col-sm-1">04</div>
+      <div id="5h" class="hour col-xs-2 col-sm-1">05</div>
+      <div id="6h" class="hour col-xs-2 col-sm-1">06</div>
+      <div id="7h" class="hour col-xs-2 col-sm-1">07</div>
+      <div id="8h" class="hour col-xs-2 col-sm-1">08</div>
+      <div id="9h" class="hour col-xs-2 col-sm-1">09</div>
+      <div id="10h" class="hour col-xs-2 col-sm-1">10</div>
+      <div id="11h" class="hour col-xs-2 col-sm-1">11</div>
+    </div>
+    <div id="minutes"></div>
+    <div class="row">
+      <div id="0m" class="minute col-xs-2 col-sm-1">00</div>
+      <div id="1m" class="minute col-xs-2 col-sm-1">05</div>
+      <div id="2m" class="minute col-xs-2 col-sm-1">10</div>
+      <div id="3m" class="minute col-xs-2 col-sm-1">15</div>
+      <div id="4m" class="minute col-xs-2 col-sm-1">20</div>
+      <div id="5m" class="minute col-xs-2 col-sm-1">25</div>
+      <div id="6m" class="minute col-xs-2 col-sm-1">30</div>
+      <div id="7m" class="minute col-xs-2 col-sm-1">35</div>
+      <div id="8m" class="minute col-xs-2 col-sm-1">40</div>
+      <div id="9m" class="minute col-xs-2 col-sm-1">45</div>
+      <div id="10m" class="minute col-xs-2 col-sm-1">50</div>
+      <div id="11m" class="minute col-xs-2 col-sm-1">55</div>
+    </div>
+    <div id="seconds"></div>
+    <div class="row">
+      <div id="0s" class="second col-xs-2 col-sm-1">00</div>
+      <div id="1s" class="second col-xs-2 col-sm-1">05</div>
+      <div id="2s" class="second col-xs-2 col-sm-1">10</div>
+      <div id="3s" class="second col-xs-2 col-sm-1">15</div>
+      <div id="4s" class="second col-xs-2 col-sm-1">20</div>
+      <div id="5s" class="second col-xs-2 col-sm-1">25</div>
+      <div id="6s" class="second col-xs-2 col-sm-1">30</div>
+      <div id="7s" class="second col-xs-2 col-sm-1">35</div>
+      <div id="8s" class="second col-xs-2 col-sm-1">40</div>
+      <div id="9s" class="second col-xs-2 col-sm-1">45</div>
+      <div id="10s" class="second col-xs-2 col-sm-1">50</div>
+      <div id="11s" class="second col-xs-2 col-sm-1">55</div>
+    </div>
+  </div>
+<script id="jsbin-javascript">
+function colorClock () {
+  var date = new Date();
+
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var seconds = date.getSeconds();
+  var afternoon = 0;
+  var fiveMinutes = Math.floor (minutes / 5);
+  var fiveSeconds = Math.floor (seconds / 5);
+  var ampm = 'AM';
+
+  function colorAMReset () {
+    for (i = 0; i <= 11; i++) {
+      document.getElementById('hours').style.color = '#000000';
+      document.getElementById(i + 'h').style.background = '#f57f17';
+      document.getElementById(i + 'h').style.color = '#888888';
+      document.getElementById(i + 'm').style.background = '#f57f17';
+      document.getElementById(i + 'm').style.color = '#888888';
+      document.getElementById(i + 's').style.background = '#f57f17';
+      document.getElementById(i + 's').style.color = '#888888';
+    }
+  }
+
+  function colorPMReset () {
+    for (i = 0; i <= 11; i++) {
+      document.getElementById('hours').style.color = '#ffffff';
+      document.getElementById(i + 'h').style.background = '#263238';
+      document.getElementById(i + 'h').style.color = '#555555';
+      document.getElementById(i + 'm').style.background = '#263238';
+      document.getElementById(i + 'm').style.color = '#555555';
+      document.getElementById(i + 's').style.background = '#263238';
+      document.getElementById(i + 's').style.color = '#555555';
+    }
+  }
+
+  if (hours > 11) {
+
+    colorPMReset();
+
+    hours = hours - 12;
+    ampm = 'PM';
+    document.getElementById('0h').innerHTML = 12;
+
+  for (h = 0; h <= hours; h++) {
+    var hourName = h + 'h';
+    console.log(hourName);
+    document.getElementById(hourName).style.background = 'rgba(155, 255, 255, .1)';
+    document.getElementById(hourName).style.color = '#000000';
+  }
+    document.getElementById((hours) + 'h').style.background = 'rgba(177, 255, 255, .2)';
+    document.getElementById((hours) + 'h').style.color = '#ffffff';
+
+  for (m = 0; m <= fiveMinutes; m++) {
+    var minuteName = m + 'm';
+    document.getElementById(minuteName).style.background = 'rgba(155, 255, 255, .3)';
+    document.getElementById(minuteName).style.color = '#000000';
+  }
+    document.getElementById((fiveMinutes) + 'm').style.background = 'rgba(177, 255, 255, .4)';
+    document.getElementById((fiveMinutes) + 'm').style.color = '#ffffff';
+
+  for (s = 0; s <= fiveSeconds; s++) {
+    var secondName = s + 's';
+    document.getElementById(secondName).style.background = 'rgba(155, 255, 255, .5)';
+    document.getElementById(secondName).style.color = '#000000';
+  }
+    document.getElementById((fiveSeconds) + 's').style.background = 'rgba(177, 255, 255, .6)';
+    document.getElementById((fiveSeconds) + 's').style.color = '#ffffff';
+
+  } else {
+
+    colorAMReset();
+    document.getElementById('0h').innerHTML = '00';
+
+    document.getElementById('html').style.background = '#f57f17';
+    document.getElementById('body').style.background = '#f57f17';
+
+    for (h = 0; h <= hours; h++) {
+
+      var amHourName = h + 'h';
+      document.getElementById(amHourName).style.background = 'rgba(255, 255, 255, .1)';
+      document.getElementById(amHourName).style.color = '#ffffff';
+    }
+    document.getElementById((hours) + 'h').style.background = 'rgba(255, 255, 255, .2)';
+    document.getElementById((hours) + 'h').style.color = '#000000';
+
+    for (m = 0; m <= fiveMinutes; m++) {
+      var amMinuteName = m + 'm';
+      document.getElementById(amMinuteName).style.background = 'rgba(255, 255, 255, .3)';
+      document.getElementById(amMinuteName).style.color = '#ffffff';
+  }
+    document.getElementById((fiveMinutes) + 'm').style.background = 'rgba(255, 255, 255, .4)';
+    document.getElementById((fiveMinutes) + 'm').style.color = '#000000';
+
+    for (s = 0; s <= fiveSeconds; s++) {
+      var amSecondName = s + 's';
+      document.getElementById(amSecondName).style.background = 'rgba(255, 255, 255, .5)';
+      document.getElementById(amSecondName).style.color = '#ffffff';
+    }
+    document.getElementById((fiveSeconds) + 's').style.background = 'rgba(255, 255, 255, .6)';
+    document.getElementById((fiveSeconds) + 's').style.color = '#000000';
+}
+  document.getElementById('hours').innerHTML = ampm;
+
+  console.log(hours +':'+ minutes + ':' + seconds);
+  setTimeout(function() { colorClock(); }, 1000);
+}
+
+colorClock();
+</script>
+</body>
+</html>
